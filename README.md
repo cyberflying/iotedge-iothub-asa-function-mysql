@@ -1,17 +1,24 @@
 # IoT Edge > IoT hub > Stream Analytics > Azure Function > Azure Database for mysql
 
 # 目录(Table of Contents)
-* [create and config IoT Hub](#IoT-Hub)
-* [install and config IoT Edge](#IoT-Edge)
-* [create and config mysql](#mysql)
-* [create and config Azure Function](#Azure-Function)
-* [create and config Stream Analytics](#Stream-Analytics)
+* [Create and Config IoT Hub](#Create-and-Config-IoT-Hub)
+* [Install and Config IoT Edge on a Device](#Install-and-Config-IoT-Edge-on-a-Device)
+* [Create and Config mysql](#Create-and-Config-mysql)
+* [Create and Config Azure Function](#Create-and-Config-Azure-Function)
+* [Create and Config Stream Analytics](#Create-and-Config-Stream-Analytics)
 
 
 
-# IoT Hub
+# Create and Config IoT Hub
+1. 具体步骤可以参考[https://docs.azure.cn/zh-cn/iot-hub/iot-hub-create-through-portal](https://docs.azure.cn/zh-cn/iot-hub/iot-hub-create-through-portal)。  
+创建IoT Hub的基本过程不再赘述，本例主要介绍如何添加一个edge device连接到IoT Hub中，并在部署一个module到这个edge device。
 
-# IoT Edge
+2. 注册一个edge device，可以参考文档[https://docs.azure.cn/zh-cn/iot-edge/how-to-register-device-portal](https://docs.azure.cn/zh-cn/iot-edge/how-to-register-device-portal)。
+
+3. 部署一个名字为tempSensor测试module，这个module会模拟温度、湿度等数据发送到IoT Hub。具体步骤可以参考文档[https://docs.azure.cn/zh-cn/iot-edge/how-to-deploy-modules-portal](https://docs.azure.cn/zh-cn/iot-edge/how-to-deploy-modules-portal)。
+
+# Install and Config IoT Edge on a Device
+具体步骤可以参考[https://docs.microsoft.com/en-us/azure/iot-edge/how-to-install-iot-edge-windows](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-install-iot-edge-windows)。  
 本例中采用windows 10企业版（一台工作中使用的[surface book 2](https://www.microsoftstore.com.cn/c/surface)）做为运行IoT Edge的Host OS，运行windows container，IoT Edge支持的操作系统请参考[https://docs.microsoft.com/en-us/azure/iot-edge/support](https://docs.microsoft.com/en-us/azure/iot-edge/support#operating-systems)。
 
 安装IoT Edge的步骤，请参考[https://docs.microsoft.com/en-us/azure/iot-edge/how-to-install-iot-edge-windows](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-install-iot-edge-windows#all-installation-parameters)  
@@ -74,8 +81,8 @@ edgeAgent        running          Up 26 minutes    mcr.microsoft.com/azureiotedg
 
 ```
 
-# mysql
+# Create and Config mysql
 
-# Azure Function
+# Create and Config Azure Function
 
-# Stream Analytics
+# Create and Config Stream Analytics
