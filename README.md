@@ -25,6 +25,14 @@
 ![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/iothub5.jpg)
 
 3. 部署一个名字为tempSensor测试module，这个module会模拟温度、湿度等数据发送到IoT Hub。具体步骤可以参考文档[https://docs.azure.cn/zh-cn/iot-edge/how-to-deploy-modules-portal](https://docs.azure.cn/zh-cn/iot-edge/how-to-deploy-modules-portal)。
+添加一个IoT Edge module，本例为tempSensor的名称，说明从官方地址**mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:1.0**拉取,然后保存：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/iotedge_module1.jpg)
+看到部署模块中的名称，然后下一步：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/iotedge_module2.jpg)
+这儿是定义edge上多个module之间数据流向的，当部署不同的module时，可以根据module的具体功能和业务需要，很方便的在云端进行远程操作，不必到具体设备端进行修改，这是Azure IoT Edge很重要的一个功能，后面找时间再具体说明。这儿保持默认点击下一步即可：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/iotedge_module3.jpg)
+最后提交，Azure会根据这些配置信息，将向远端设备进行推送配置，使其在设备端生效，由设备端根据配置去真正拉取container image，然后启动运行：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/iotedge_module4.jpg)
 
 # Install and Config IoT Edge on a Device
 具体步骤可以参考[https://docs.microsoft.com/en-us/azure/iot-edge/how-to-install-iot-edge-windows](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-install-iot-edge-windows)。  
