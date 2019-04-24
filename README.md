@@ -13,7 +13,16 @@
 1. 具体步骤可以参考[https://docs.azure.cn/zh-cn/iot-hub/iot-hub-create-through-portal](https://docs.azure.cn/zh-cn/iot-hub/iot-hub-create-through-portal)。  
 创建IoT Hub的基本过程不再赘述，本例主要介绍如何添加一个edge device连接到IoT Hub中，并在部署一个module到这个edge device。
 ![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/iothub1.jpg)
+
 2. 注册一个edge device，可以参考文档[https://docs.azure.cn/zh-cn/iot-edge/how-to-register-device-portal](https://docs.azure.cn/zh-cn/iot-edge/how-to-register-device-portal)。
+添加一个edge设备：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/iothub2.jpg)
+设备ID自己起名字避免重复即可，然后保存，保存后密钥会自动生成：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/iothub3.jpg)
+完成后，可以看到edge设备列表中多了刚刚添加的设备ID：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/iothub4.jpg)
+点击该设备ID，即可看到默认的两个module：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/iothub5.jpg)
 
 3. 部署一个名字为tempSensor测试module，这个module会模拟温度、湿度等数据发送到IoT Hub。具体步骤可以参考文档[https://docs.azure.cn/zh-cn/iot-edge/how-to-deploy-modules-portal](https://docs.azure.cn/zh-cn/iot-edge/how-to-deploy-modules-portal)。
 
@@ -70,7 +79,7 @@ Status   Name               DisplayName
 ------   ----               -----------                           
 Running  iotedge            iotedge  
 ```
-然后Azure IoT Edge Security Daemon会启动，并拉取edgeAgent, edgeHub等module，如果配置其他模块也会到相应的container registry中去拉取下来，如本例中的tempSensor
+然后Azure IoT Edge Security Daemon会启动，并拉取edgeAgent, edgeHub等module，如果配置其他模块也会到相应的container registry中去拉取下来，如本例中的tempSensor。
 等待下载完成后，可以通过以下命令查看，PowerShell和CMD都可以：
 ```CMD
 C:\Users\keya>iotedge list
