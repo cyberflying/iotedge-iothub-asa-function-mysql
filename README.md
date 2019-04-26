@@ -32,7 +32,7 @@
 ![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/iotedge_module1.jpg)
 看到部署模块中的名称，然后下一步：
 ![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/iotedge_module2.jpg)
-这儿是定义edge上多个module之间数据流向的，当部署不同的module时，可以根据module的具体功能和业务需要，很方便的在云端进行远程操作，不必到具体设备端进行修改，**这是Azure IoT Edge很重要的一个功能**，后面找时间再具体说明。这儿保持默认点击下一步即可：
+这儿是定义edge上多个module之间数据流向的，当部署多个的module时，可以根据module的具体功能和业务需要，很方便的在云端进行远程操作，控制module之间的数据流向，不必到具体设备端进行修改，**这是Azure IoT Edge很重要的一个功能**，这儿先知道这个功能，以后再单独介绍。这儿保持默认点击下一步即可：
 ![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/iotedge_module3.jpg)
 最后提交，Azure会根据这些配置信息，将向远端设备进行推送配置，使其在设备端生效，由设备端根据配置去真正拉取container image，然后启动运行：
 ![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/iotedge_module4.jpg)
@@ -92,7 +92,7 @@ Status   Name               DisplayName
 ------   ----               -----------                           
 Running  iotedge            iotedge  
 ```
-然后Azure IoT Edge Security Daemon会启动，并拉取edgeAgent, edgeHub等module，如果配置其他模块也会到相应的container registry中去拉取下来，如本例中的tempSensor。
+然后Azure IoT Edge Security Daemon会启动，并拉取edgeAgent, edgeHub等module，如果配置其他模块也会到相应的container registry中去拉取下来，如本例中的tempSensor。  
 等待下载完成后，可以通过以下命令查看，PowerShell和CMD都可以：
 ```CMD
 C:\Users\keya>iotedge list
