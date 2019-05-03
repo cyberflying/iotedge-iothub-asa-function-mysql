@@ -10,10 +10,10 @@
 
 
 # Create and Config IoT Hub
-1. 具体步骤可以参考[https://docs.azure.cn/zh-cn/iot-hub/iot-hub-create-through-portal](https://docs.azure.cn/zh-cn/iot-hub/iot-hub-create-through-portal)。  
+1. 具体步骤可以参考[https://docs.azure.cn/zh-cn/iot-hub/iot-hub-create-through-portal](https://docs.azure.cn/zh-cn/iot-hub/iot-hub-create-through-portal)。
 
 创建IoT Hub的基本过程不再赘述，本例主要介绍如何添加一个edge device连接到IoT Hub中，并在部署一个module到这个edge device。
-![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/iothub1.jpg)
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/iothub1.jpg) 
 
 2. 注册一个edge device，可以参考文档[https://docs.azure.cn/zh-cn/iot-edge/how-to-register-device-portal](https://docs.azure.cn/zh-cn/iot-edge/how-to-register-device-portal)。
 
@@ -104,7 +104,11 @@ edgeAgent        running          Up 26 minutes    mcr.microsoft.com/azureiotedg
 ```
 
 # Create and Config mysql
+1. 具体步骤可以参考文档[https://docs.azure.cn/zh-cn/mysql/quickstart-create-mysql-server-database-using-azure-portal](https://docs.azure.cn/zh-cn/mysql/quickstart-create-mysql-server-database-using-azure-portal)。  
 
+2. 本例为了测试方便在配置mysql的连接安全性时，以测试为目的，实际生成环境下，请慎重考虑。  
+添加本机的ip地址，打开允许Azure中的其他服务访问，禁用SSL等，都是为了测试方便：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/mysql1.jpg) 
 # Create and Config Azure Function
 
 # Create and Config Stream Analytics
