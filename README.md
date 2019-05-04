@@ -7,7 +7,7 @@
 * [Create and Config Azure Function](#Create-and-Config-Azure-Function)
 * [Create and Config Stream Analytics](#Create-and-Config-Stream-Analytics)
 
-
+本例基于一个客户的真实需求，客户应用主要由java开发的系统，数据库采用mysql。
 
 # Create and Config IoT Hub
 1. 具体步骤可以参考[https://docs.azure.cn/zh-cn/iot-hub/iot-hub-create-through-portal](https://docs.azure.cn/zh-cn/iot-hub/iot-hub-create-through-portal)。
@@ -109,6 +109,44 @@ edgeAgent        running          Up 26 minutes    mcr.microsoft.com/azureiotedg
 2. 本例为了测试方便在配置mysql的连接安全性时，以测试为目的，实际生成环境下，请慎重考虑。  
 添加本机的ip地址，打开允许Azure中的其他服务访问，禁用SSL等，都是为了测试方便：
 ![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/mysql1.jpg) 
-# Create and Config Azure Function
 
+# Create and Config Azure Function
+因客户主要的开发采用的Java，因此在Azure Function的语言选择上为保持一致也将采用Java。
+
+1. 首先通过Azure portal创建好Function APP  
+登录portal后，选择**创建资源**，点击**函数应用**:
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function1.jpg)
+
+命名Function APP的名称，新建或选择已有的资源组，存储账户和应用服务计划（App service plan），本例全为新建的：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function2.jpg)
+
+创建App service plan时，可以选在不同的SKU，本例是选了一个开发测试的定价层B1：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function3.jpg)
+
+创建完App service plan，回到Function app页面，点击**创建**按钮：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function4.jpg)
+
+整个Function app创建完成后，可以通过导航菜单查看刚刚创建的**fndemoapp**:
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function5.jpg)
+
+2. 上面在Azure portal的操作暂时告一段落。下面的步骤将会创建function和其代码逻辑，在这之前，需要先准备一些工具和依赖项，具体步骤，请参考文档：[https://docs.azure.cn/zh-cn/azure-functions/functions-create-first-java-maven](https://docs.azure.cn/zh-cn/azure-functions/functions-create-first-java-maven)。
+
+3. 使用maven生成新的Function项目  
+在windows cmd下执行以下代码：
+```CMD
+mvn archetype:generate ^
+    -DarchetypeGroupId=com.microsoft.azure ^
+    -DarchetypeArtifactId=azure-functions-archetype
+```
+下图示例中显示下载了Maven的Azure function插件新版本，高亮部分是需要在交互时提供的参数，其中的**appName**即是在Azure portal创建的Function app的名称，一定要一致，同时**appRegion**和**resourceGroup**也要和Azure portal创建时保持一致：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function6.jpg)
+
+继续执行等待Function项目创建完成：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function7.jpg)
+
+然后在项目所在目录，可以看到产生了一些目录和文件：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function8.jpg)
+
+并且自动生成了一个**Function.java**文件，这个文件即为Function的逻辑代码：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function9.jpg)
 # Create and Config Stream Analytics
