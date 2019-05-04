@@ -3,9 +3,9 @@
 # 目录(Table of Contents)
 * [Create and Config IoT Hub](#Create-and-Config-IoT-Hub)
 * [Install and Config IoT Edge on a Device](#Install-and-Config-IoT-Edge-on-a-Device)
+* [Create and Config Stream Analytics](#Create-and-Config-Stream-Analytics)
 * [Create and Config mysql](#Create-and-Config-mysql)
 * [Create and Config Azure Function](#Create-and-Config-Azure-Function)
-* [Create and Config Stream Analytics](#Create-and-Config-Stream-Analytics)
 
 本例基于一个客户的真实需求，客户应用主要由java开发的系统，数据库采用mysql。
 
@@ -110,6 +110,15 @@ edgeAgent        running          Up 26 minutes    mcr.microsoft.com/azureiotedg
 添加本机的ip地址，打开允许Azure中的其他服务访问，禁用SSL等，都是为了测试方便：
 ![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/mysql1.jpg) 
 
+3. 连接到mysql实例，创建相应的数据库和表  
+本例以mysql workbench连接到Azure Database for mysql，创建数据库iotdb和表iottab，仅作测试使用，具体结构以实际情况而定：
+```SQL
+create database iotdb;
+use iotdb;
+create table iottab (id serial PRIMARY KEY, envtemp VARCHAR(30), envhumity ARCHAR(30));
+```
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/mysql2.jpg) 
+
 # Create and Config Azure Function
 因客户主要的开发采用的Java，因此在Azure Function的语言选择上为保持一致也将采用Java。
 
@@ -128,6 +137,8 @@ edgeAgent        running          Up 26 minutes    mcr.microsoft.com/azureiotedg
 
 整个Function app创建完成后，可以通过导航菜单查看刚刚创建的**fndemoapp**:
 ![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function5.jpg)
+可以看到Function app已经创建完成，但是具体function还没有，所以在**函数**菜单下是空的。  
+**这儿的Function app相对于function来说，更像一个容器，app里面可以有很多的function。**
 
 2. 上面在Azure portal的操作暂时告一段落。下面的步骤将会创建function和其代码逻辑，在这之前，需要先准备一些工具和依赖项，具体步骤，请参考文档：[https://docs.azure.cn/zh-cn/azure-functions/functions-create-first-java-maven](https://docs.azure.cn/zh-cn/azure-functions/functions-create-first-java-maven)。
 
@@ -149,4 +160,80 @@ mvn archetype:generate ^
 
 并且自动生成了一个**Function.java**文件，这个文件即为Function的逻辑代码：
 ![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function9.jpg)
+
+4. 完成function的逻辑代码和相关配置  
+该function的主要功能是接受Stream Analytics传来的数据，然后写入到mysql中。本例作为测试的目的，仅在Stream Analytics中将IoT hub传来的数据，取其中的温度和湿度两个数值，然后output到function。
+
+    4.1 修改代码  
+该function的名称是Fn2mysql, 具体代码参考本repo中的Fn2mysql.java文件。
+
+    4.2 修改pom.xml文件  
+在代码中使用了json和mysql等对象，需要有相关的依赖，需要在项目的pom.xml文件中声明：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function10.jpg)
+    
+    4.3 在Function app配置中添加环境变量  
+在代码中使用了mysql的连接字符串，是从Function App的应用程序设置中读取的环境变量：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function11.jpg)
+
+具体设置可以点击进入编辑页面，**New application setting**可以单个增加环境变量，**Advanced edit**可以以json的格式批量添加环境变量：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function12.jpg)
+
+5. 在本地测试执行function
+
+    5. 打包测试function
+在function的目录下执行命令：
+```CMD
+mvn clean package 
+```
+如下图所示：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function13.jpg)
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function14.jpg)
+
+    5. 本地设置session级别的环境变量，方便本地测试
+因为在java代码中调用了环境变量获取mysql的连接信息，在运行function之前，先设置好，以便测试通过：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function15.jpg)
+测试时，指定了mysql连接信息禁用ssl，因为连接字符串中含有`"&"`符号，在CMD中需要使用转义字符`"^"`来标识`"&"`符号。
+
+    5. 本地运行function：
+```CMD
+mvn azure-functions:run
+```
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function16.jpg)
+
+    5. 验证测试结果
+本例以postman对本地运行的function进行测试：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function17.jpg)
+
+查看function本地运行状态，显示成功插入一行记录：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function18.jpg)
+
+查看mysql表中数据，显示已经存在：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function19.jpg)
+
+本地测试function成功，可以Ctrl+C结束本地运行。
+
+6. 在CMD中使用Azure CLI登录Azure账户
+下面为将function发布到Azure中做准备，需要先登录Azure账户，使用Azure CLI进行登录，需要指定中国区Azure，按照提示操作即可：
+```CMD
+az cloud set -n AzureChinaCloud
+az login
+```
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function20.jpg)
+
+7. 部署function到Azure中
+运行以下命令将function部署到Azure中：
+```CMD
+mvn azure-functions:deploy
+```
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function21.jpg)
+在Azure portal中查看function部署成功：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function22.jpg)
+
+8. 测试Azure中部署的function
+在Azure portal中进行测试function是否可以正常运行，点击function页面中的右侧边栏**测试**，选择**POST**方法，填入模拟的json数据，点击**运行**按钮：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function23.jpg)
+运行后在页面的输出和日志窗口中看到成功的状态信息：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function24.jpg)
+然后查看mysql中也成功插入一行数据:
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function25.jpg)
 # Create and Config Stream Analytics
