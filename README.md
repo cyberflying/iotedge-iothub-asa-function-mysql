@@ -181,7 +181,7 @@ mvn archetype:generate ^
 
 ## 在本地测试执行function
 
-1. 打包测试function
+1. 打包测试function  
 在function的目录下执行命令：
 ```CMD
 mvn clean package
