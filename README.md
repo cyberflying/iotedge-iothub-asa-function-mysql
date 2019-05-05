@@ -7,7 +7,7 @@
 * [Create and Config Azure Function](#Create-and-Config-Azure-Function)
 * [Create and Config Stream Analytics](#Create-and-Config-Stream-Analytics)
 
-本例基于一个客户的真实需求，客户应用主要由java开发的系统，数据库采用mysql。
+本例基于客户的一个真实场景，将设备信息通过IoT Hub上传到Azure，将数据处理后存储在Azure Database for mysql中。客户应用主要由java开发的系统，数据库采用mysql。
 
 # Create and Config IoT Hub
 1. 具体步骤可以参考[https://docs.azure.cn/zh-cn/iot-hub/iot-hub-create-through-portal](https://docs.azure.cn/zh-cn/iot-hub/iot-hub-create-through-portal)。
@@ -239,3 +239,18 @@ mvn azure-functions:deploy
 ![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/function25.jpg)
 
 # Create and Config Stream Analytics
+Azure Stream Analytics（后面简称为ASA）是Azure中可以实时处理流式数据的PaaS服务，有很多内置的函数可以处理很多复杂的逻辑，适用于普遍的流数据分析场景。ASA已类似SQL的查询语言表示，可以处理采用 CSV、JSON 和 Avro 数据格式的事件数据。
+ASA的创建和使用，可以参考[https://docs.azure.cn/zh-cn/stream-analytics/stream-analytics-quick-create-portal](https://docs.azure.cn/zh-cn/stream-analytics/stream-analytics-quick-create-portal)，另外，对于刚才提到的各种流数据分析场景，ASA可以很方便的进行处理，具体示例请参考[https://docs.azure.cn/zh-cn/stream-analytics/stream-analytics-stream-analytics-query-patterns](https://docs.azure.cn/zh-cn/stream-analytics/stream-analytics-stream-analytics-query-patterns)。
+
+本例中，需要在ASA中创建一个新的输出，类型为Azure Function，如图所示：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/asa1.jpg)
+
+在输出的定义中，选择前面创建的Azure Function并保存：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/asa2.jpg)
+
+在ASA的查询中，是真正的逻辑处理，会用到类似SQL的语言进行表示。本例中会从作为输入的IoT Hub中获取环境温度和湿度数据，然后输出给Azure Function进行处理：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/asa3.jpg)
+
+配置完成后，启动ASA。查看IoT Edge tempSensor模块发出的数据，经过IoT Hub > Stream Analytics > Azure Function的处理，已经存入到Azure Database for mysql中了。
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/asa4.jpg)
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/asa5.jpg)
