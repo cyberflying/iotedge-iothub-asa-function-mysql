@@ -1,13 +1,18 @@
 # IoT Edge > IoT hub > Stream Analytics > Azure Function > Azure Database for mysql
 
-# 目录(Table of Contents)
+# Overview
 * [Create and Config IoT Hub](#Create-and-Config-IoT-Hub)
 * [Install and Config IoT Edge on a Device](#Install-and-Config-IoT-Edge-on-a-Device)
 * [Create and Config mysql](#Create-and-Config-mysql)
 * [Create and Config Azure Function](#Create-and-Config-Azure-Function)
 * [Create and Config Stream Analytics](#Create-and-Config-Stream-Analytics)
+* [Summary](#总结)
 
-本例基于客户的一个真实场景，将设备信息通过IoT Hub上传到Azure，将数据处理后存储在Azure Database for mysql中。客户应用主要由java开发的系统，数据库采用mysql。
+本例基于客户的一个真实场景，将设备信息通过IoT Hub上传到Azure，将数据处理后存储在Azure Database for mysql中。客户应用主要由Java开发的系统，数据库采用mysql。  
+这个“经典”的架构如何快速以云原生的方式使用Azure中的PaaS服务，参照本文可以快速实现。
+
+整体架构如下图所示：
+![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/architecture.jpg)
 
 # Create and Config IoT Hub
 1. 具体步骤可以参考[https://docs.azure.cn/zh-cn/iot-hub/iot-hub-create-through-portal](https://docs.azure.cn/zh-cn/iot-hub/iot-hub-create-through-portal)。
@@ -254,3 +259,8 @@ ASA的创建和使用，可以参考[https://docs.azure.cn/zh-cn/stream-analytic
 配置完成后，启动ASA。查看IoT Edge tempSensor模块发出的数据，经过IoT Hub > Stream Analytics > Azure Function的处理，已经存入到Azure Database for mysql中了。
 ![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/asa4.jpg)
 ![](https://github.com/cyberflying/iotedge-iothub-asa-function-mysql/blob/master/img/asa5.jpg)
+
+# 总结
+本文主要介绍了Azure IoT相关的服务以及如何使用，在具体应用场景中，物联网只是采集数据的一种技术手段，应用的实际目的还是要对业务数据进行分析，发现更多业务洞察，因此后续的数据分析和数据可视化等服务尤为重要。可以参考Azure数据分析相关的[更多文档](https://docs.azure.cn/zh-cn/index#pivot=products&panel=analytics)。
+
+文中提到的Azure IoT服务，是为了让使用者更方便、快捷的搭建IoT服务，而不需要更多地关注底层实现，这也是Azure对实现业务需求带来的好处。
